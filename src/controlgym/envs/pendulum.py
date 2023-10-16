@@ -20,7 +20,8 @@ class UpPendulumEnv(PendulumEnv):
         options: Optional[dict] = None,
     ):
         super().reset(seed=seed)
-        self.state = self.np_random.uniform(low=-np.pi / 5, high=np.pi / 5, size=(2,))
+        bounds = np.array([np.pi / 6, 0.1])
+        self.state = self.np_random.uniform(low=-bounds, high=bounds, size=(2,))
         self.last_u = None
         if not return_info:
             return self._get_obs()
