@@ -1,9 +1,12 @@
 from typing import Optional
 
-from gym.envs.classic_control.pendulum import PendulumEnv
-
+import control as ct
+import control.matlab as ctm
 import numpy as np
 import matplotlib.pyplot as plt
+
+from gym.envs.classic_control.pendulum import PendulumEnv
+
 
 from controlgym.plotting import Multiple
 
@@ -107,11 +110,36 @@ def plot_pendulum_history(time, command, thetas, thetadots, max_torque=np.inf):
     plt.show()
 
 
+def get_pendulum_linear_model(env: PendulumEnv, costheta: float = 1):
+    A = np.array(
+        [
+            [0, 1],
+            [costheta * env.g / env.l, 0],
+        ]
+    )
+
+    B = np.array([[0], [-3 / (env.m * env.l**2)]])
+
+    C = np.eye(2)
+
+    D = np.zeros((2, 1))
+
+    continuous_model = ct.ss(A, B, C, D)
+    return ctm.c2d(continuous_model, Ts=env.dt)
+
+
+def get_pendulum_linear_lqr_gain(model: ct.StateSpace):
+    Qx1 = np.diag([1, 0.1])
+    Qu1a = np.diag([0.001])
+    K, _, _ = ct.lqr(model, Qx1, Qu1a)
+    return np.array(K)
+
+
 def pendulum_rhs(t, x, u, params: dict):
     # Parameter setup
-    g = params.get("g", 9.81)
-    l = params.get("l", 1.0)
-    m = params.get("m", 1.0)
+    gravity = params.get("g", 9.81)
+    length = params.get("l", 1.0)
+    mass = params.get("m", 1.0)
     dt = params.get("dt", 0.05)
     max_speed = params.get("max_speed", 5.0)
 
@@ -123,7 +151,7 @@ def pendulum_rhs(t, x, u, params: dict):
     u_0 = u[0]
 
     # Compute the discrete updates
-    dthdot = 3 * g / (2 * l) * np.sin(th) + 3.0 / (m * l**2) * u_0
+    dthdot = 3 * gravity / (2 * length) * np.sin(th) + 3.0 / (mass * length**2) * u_0
     dth = thdot + dthdot * dt
     dth = np.clip(dth, -max_speed, max_speed)
 
