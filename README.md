@@ -15,10 +15,11 @@ ControlGym allows to have working examples of control algorithms to compare with
 
 Make sure you have Python installed:
 
-**1. (Optional) Create a virtual environment:**
+**1. (Optional) Create a virtual environment and activate it:**
 
 ```bash
 python -m venv .env
+.\.env\Scripts\activate
 ```
 
 **2. Install the package with pip in your terminal:**
@@ -29,9 +30,7 @@ pip install git+https://github.com/MathisFederico/ControlGym.git
 
 # Experiments
 
-## LQR
+## Pendulum [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mathisfederico/controlgym/blob/master/notebooks/pendulum.ipynb)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mathisfederico/controlgym/blob/master/notebooks/lqr.ipynb)
-
-## LQR + Kalman
+![Swing up !](assets/pendulum_swing_up.gif)
 
