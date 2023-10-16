@@ -9,7 +9,7 @@ ControlGym allows to have working examples of control algorithms to compare with
 # Table of Contents
 
 -   [**Installation**](#installation)
--   [**Usage**](#usage)
+-   [**Experiments**](#experiments)
 
 # Installation
 
