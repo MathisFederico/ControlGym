@@ -1,18 +1,10 @@
-# **<project>**
+# **ControlGym**
 
-Short description of the project.
+Trials of control theory algorithms on OpenAI Gym classic control environments.
 
-<p align="center">
-  <img src="assets/myproject.png" alt="General illustration of the project" width="60%"/>
-</p>
+# Why ControlGym ?
 
-# Why <project> ?
-
-What is the initial motivation of this project ?
-
-## Objective of the project
-
-How this project will be considered achieved ?
+ControlGym allows to have working examples of control algorithms to compare with reinforcement learning algorithms.
 
 # Table of Contents
 
@@ -32,13 +24,14 @@ python -m venv .env
 **2. Install the package with pip in your terminal:**
 
 ```bash
-pip install git+https://github.com/IRLL/<project>.git
+pip install git+https://github.com/MathisFederico/ControlGym.git
 ```
 
-# Usage
+# Experiments
 
-**Run the project with the following command:**
+## LQR
 
-```bash
-python -m <project>
-```
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mathisfederico/controlgym/blob/master/notebooks/lqr.ipynb)
+
+## LQR + Kalman
+

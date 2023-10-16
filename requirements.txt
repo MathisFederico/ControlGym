@@ -1,0 +1,4 @@
+control
+gym[classic_control]==0.22.0
+matplotlib
+hebg>=0.2.4

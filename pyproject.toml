@@ -2,7 +2,7 @@
 requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
 
 [project]
-name = "mypackage"
+name = "controlgym"
 dynamic = ["version", "readme", "dependencies"]
 license = { text = "Apache-2.0 license" }
 requires-python = ">=3.7"
@@ -11,7 +11,7 @@ requires-python = ">=3.7"
 license-files = ['LICEN[CS]E*', 'COPYING*', 'NOTICE*', 'AUTHORS*']
 
 [project.scripts]
-mypackage = "mypackage.__main__:main"
+controlgym = "controlgym.__main__:main"
 
 [tool.setuptools.dynamic]
 readme = { file = ["README.md"] }
