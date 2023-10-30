@@ -20,7 +20,7 @@ class UpPendulumEnv(PendulumEnv):
         options: Optional[dict] = None,
     ):
         super().reset(seed=seed)
-        bounds = np.array([np.pi / 6, 0.1])
+        bounds = np.array([np.pi / 8, 1])
         self.state = self.np_random.uniform(low=-bounds, high=bounds, size=(2,))
         self.last_u = None
         if not return_info:
@@ -74,7 +74,7 @@ def thetas_from_obs(observations):
 
 
 def plot_pendulum_history(time, command, thetas, thetadots, max_torque=np.inf):
-    _, axes = plt.subplots(5, 1, sharex=True, figsize=(6.4, 9.8))
+    _, axes = plt.subplots(3, 1, sharex=True, figsize=(6.4, 9.8))
     axes: list[plt.Axes] = axes
     axes[0].plot(time, thetas, label="Theta")
     axes[0].set_title(r"$\theta$")
@@ -95,18 +95,19 @@ def plot_pendulum_history(time, command, thetas, thetadots, max_torque=np.inf):
     # axes[2].set_ylim((-1.2*env.max_torque, 1.2*env.max_torque))
     axes[2].set_title("u")
     axes[2].grid()
+    plt.show()
 
-    axes[3].plot(time, np.cos(thetas), label="x")
-    axes[3].set_title(r"x")
-    axes[3].set_ylim((-1, 1))
-    axes[3].grid()
+    ax = plt.figure().add_subplot(projection="3d")
 
-    axes[4].plot(time, np.sin(thetas), label="y")
-    axes[4].set_title(r"y")
-    axes[4].set_ylim((-1, 1))
-    axes[4].grid()
+    # Prepare arrays x, y, z
+    x = np.sin(thetas)
+    y = np.cos(thetas)
 
-    plt.xlabel("Time")
+    ax.plot(time, x, y, label="Trajectory")
+    ax.legend()
+    ax.set_ylim((-1, 1))
+    ax.set_zlim((-1, 1))
+
     plt.tight_layout()
     plt.show()
 
@@ -143,20 +144,22 @@ def pendulum_rhs(t, x, u, params: dict):
     mass = params.get("m", 1.0)
     dt = params.get("dt", 0.05)
     max_speed = params.get("max_speed", 5.0)
+    max_torque = params.get("max_torque", 2.0)
 
     # Map the states into local variable names
     th = x[0]
     thdot = x[1]
 
     # Compute the control action
-    u_0 = u[0]
+    u = np.clip(u, -max_torque, max_torque)[0]
 
     # Compute the discrete updates
-    dthdot = 3 * gravity / (2 * length) * np.sin(th) + 3.0 / (mass * length**2) * u_0
-    dth = thdot + dthdot * dt
-    dth = np.clip(dth, -max_speed, max_speed)
+    dthdot = 3 * gravity * np.sin(th) / (2 * length) + 3.0 * u / (mass * length**2)
+    newthdot = np.clip(thdot + dthdot * dt, -max_speed, max_speed)
+    newth = th + newthdot * dt
+    newth = np.mod(newth + np.pi, 2 * np.pi) - np.pi
 
-    return np.array([dth, dthdot])
+    return np.array([newth, newthdot])
 
 
 def pendulum_obs_to_state(observation) -> np.ndarray:
