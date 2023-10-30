@@ -157,3 +157,9 @@ def pendulum_rhs(t, x, u, params: dict):
     dth = np.clip(dth, -max_speed, max_speed)
 
     return np.array([dth, dthdot])
+
+
+def pendulum_obs_to_state(observation) -> np.ndarray:
+    x, y, theta_dot = observation
+    theta = np.arctan2(y, x)
+    return np.array([theta, theta_dot])

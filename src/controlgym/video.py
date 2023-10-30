@@ -3,6 +3,7 @@ import glob
 import io
 import base64
 from pathlib import Path
+from typing import Optional
 
 from IPython.display import HTML
 from IPython import display as ipythondisplay
@@ -41,13 +42,16 @@ def show_video(max_number=-1, videos_folder="videos"):
         print("Could not find video")
 
 
-def record_video(env: Env, agent: Agent, folder: Path = Path("./videos")):
+def record_video(
+    env: Env,
+    agent: Agent,
+    folder: Path = Path("./videos"),
+    steptime: Optional[float] = None,
+):
     os.makedirs(folder, exist_ok=True)
     set_level(40)
     observations = []
     actions = []
-
-    has_time = hasattr(env, "dt")
     times = []
 
     monitored_env = RecordVideo(
@@ -64,8 +68,8 @@ def record_video(env: Env, agent: Agent, folder: Path = Path("./videos")):
         observations.append(observation)
         actions.append(action)
 
-        if has_time:
-            time += env.dt
+        if steptime is not None:
+            time += steptime
             times.append(time)
 
     return np.array(observations), np.array(actions), np.array(times)
