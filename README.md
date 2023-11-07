@@ -34,3 +34,9 @@ pip install git+https://github.com/MathisFederico/ControlGym.git
 
 ![Swing up !](assets/pendulum_swing_up.gif)
 
+
+## CartPole [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mathisfederico/controlgym/blob/master/notebooks/cartpole.ipynb)
+
+![Swing up !](assets/cartpole_swingup.gif)
+
+
