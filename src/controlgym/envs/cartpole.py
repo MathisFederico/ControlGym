@@ -1,5 +1,6 @@
 from typing import Optional
 
+from matplotlib import pyplot as plt
 import numpy as np
 import control as ct
 import control.matlab as ctm
@@ -190,3 +191,21 @@ def cartpole_rhs(t, x, u, params: dict):
     theta_dot = theta_dot + thetaacc * dt
 
     return np.array([x, x_dot, theta, theta_dot])
+
+def plot_cartpole_history(time, xs, thetas, pole_lenght:float, x_threshold:float):
+    ax = plt.figure().add_subplot(projection="3d")
+
+    x_cart = xs
+    y_cart = np.zeros_like(xs)
+    ax.plot(time, x_cart, y_cart, label="Cart")
+
+    x_pole = x_cart + pole_lenght * np.sin(thetas)
+    y_pole = y_cart + pole_lenght * np.cos(thetas)
+    ax.plot(time, x_pole, y_pole, label="Pole")
+
+    ax.legend()
+    ax.set_ylim((-x_threshold, x_threshold))
+    ax.set_zlim((-1, 1))
+
+    plt.tight_layout()
+    plt.show()
